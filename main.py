@@ -1,7 +1,11 @@
 import subprocess
 import re
+import json
 
 command_output = subprocess.run(["netsh", "wlan", "show", "profiles"], capture_output=True).stdout.decode()
+with open('passwords.txt', 'a') as txt_file:
+    json.dump(command_output, txt_file)
+    txt_file.write("\n")
 print(command_output)
 
 profile_names = (re.findall("All User Profile     : (.*)\r", command_output))
@@ -25,4 +29,7 @@ if len(profile_names) != 0:
             wifi_list.append(wifi_profile)
 
 for x in range(len(wifi_list)):
+    with open('passwords.txt', 'a') as txt_file:
+        json.dump(wifi_list[x], txt_file)
+        txt_file.write('\n')
     print(wifi_list[x])
